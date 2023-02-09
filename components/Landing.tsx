@@ -36,7 +36,7 @@ export const Landing = () => {
 							</span>
 						</p>
 						<br />
-					<input type="text" name="Ally3" className="w-full rounded-xl h-14 bg-transparent text-[#939393] outline outline-[#939393] px-4" placeholder="Enter Wallet Address here">
+					<input type="text" name="Unite3" className="w-full rounded-xl h-14 bg-transparent text-[#939393] outline outline-[#939393] px-4" placeholder="Enter Wallet Address here">
 						</input>
 						<br />
 						<br />
