@@ -1,9 +1,11 @@
 import styles from '../styles/ConnectBtn.module.css'
 import React, { useEffect } from 'react'
 import Connectwallet from './Connectwallet'
+import { Console } from 'console'
 
 
 export const Landing = () => {
+	console.log("----token",process.env.NEXT_PUBLIC_MINT as String)
 	return (
 		<>
 			<div className='bgLanding md:grid  '>
@@ -27,6 +29,15 @@ export const Landing = () => {
 						{' '}
 						<div>
 						<Connectwallet/>
+						<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+						<button className={styles.btn} type="button"
+                onClick={()=>{}}>
+                <span className="is-link has-text-weight-bold">
+					ARCANA AUTH
+					{/* <i className="fa fa-github" Style:font-size="48px"></i> */}
+
+                </span>
+            </button>
 						</div>
 					</div>
 					{/* <div>

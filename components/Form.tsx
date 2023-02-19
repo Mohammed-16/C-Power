@@ -3,18 +3,19 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { BsExclamationCircleFill } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import member, { addNewMember, removeMember } from "../features/member";
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { AdminSuccess } from "./AdminSuccess";
-import IPFS from "ipfs-core"
-import { fetchSigner } from '@wagmi/core';
+import IPFS from "ipfs-core";
+import { fetchSigner } from "@wagmi/core";
 import {
   addCollabName,
   addDescription,
   addGitHub,
   addLeadName,
-  addContributionPower
+  addContributionPower,
 } from "../features/collabInfo";
-import { useSigner, useContract,useProvider } from "wagmi";
-import { ethers } from 'ethers';
+import { useSigner, useContract, useProvider } from "wagmi";
+import { ethers } from "ethers";
 import { mintAndTransfer } from "../features/mintAndTransfer";
 import {
   uploadImage,
@@ -33,27 +34,26 @@ import {
   toMetaplexFileFromBrowser,
 } from "@metaplex-foundation/js";
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
-import styles from '../styles/Form.module.css'
-import {Web3Storage} from 'web3.storage'
-import ABI from './ABI'
-import { create } from 'ipfs-http-client'
-
+import styles from "../styles/Form.module.css";
+import { Web3Storage } from "web3.storage";
+import ABI from "./ABI";
+import { create } from "ipfs-http-client";
+import {StoreData} from "../components/Store";
 export const Form = () => {
-
-const projectId = '2EV1ulwPt2WecnTSBjILUic8pg9';
-const projectSecret = '964e43a1d4b789850dc353736a74ffc3';
-const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
-const client = create({
-  host: 'ipfs.infura.io',
-  port: 5001,
-  protocol: 'https',
-  apiPath: '/api/v0',
-  headers: {
-    authorization: auth,
-  }
-})
-
-
+  const projectId = "2EV1ulwPt2WecnTSBjILUic8pg9";
+  const projectSecret = "964e43a1d4b789850dc353736a74ffc3";
+  const auth =
+    "Basic " + Buffer.from(projectId + ":" + projectSecret).toString("base64");
+  const client = create({
+    host: "ipfs.infura.io",
+    port: 5001,
+    protocol: "https",
+    apiPath: "/api/v0",
+    headers: {
+      authorization: auth,
+    },
+  });
+  const { address, isConnected } = useAccount()
   const { publicKey, connected, connect } = useWallet();
   const [form, setForm] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
@@ -74,7 +74,9 @@ const client = create({
   const GitHub = useAppSelector((state) => state.collabInfo.GitHub);
   const AdminWallet = useAppSelector((state) => state.collabInfo.AdminWallet);
   const LeadName = useAppSelector((state) => state.collabInfo.LeadName);
-  const ContributionPower = useAppSelector((state) => state.collabInfo.ContributionPower);
+  const ContributionPower = useAppSelector(
+    (state) => state.collabInfo.ContributionPower
+  );
   const PreviewUrl = useAppSelector((state) => state.previewInfo.previewUrl);
   const dispatch = useAppDispatch();
   // const provider = useProvider();
@@ -92,36 +94,34 @@ const client = create({
       timeout: 60000,
     })
   );
-var MemberAddress: string;
+  var MemberAddress: string;
   const AddMember = () => {
     const a = { name, role, memberAddress, xp, ipfsHash, minted, nft };
-    const { utils } = require('ethers');
+    const { utils } = require("ethers");
 
-if (!utils.isHexString(a.memberAddress)) {
-    
-  return false;
-  }
+    if (!utils.isHexString(a.memberAddress)) {
+      return false;
+    }
 
-  try {
-    const addressBytes = utils.hexDataSlice(a.memberAddress, 0, 20);
-    const checksumAddress = utils.getAddress(addressBytes);
-    dispatch(addNewMember(a));
-    MemberAddress = a.memberAddress;
-        setDefault();
-    // return a.memberAddress === checksumAddress;
-  } catch (error) {
-    alert("Member's wallet is invalid...");
+    try {
+      const addressBytes = utils.hexDataSlice(a.memberAddress, 0, 20);
+      const checksumAddress = utils.getAddress(addressBytes);
+      dispatch(addNewMember(a));
+      MemberAddress = a.memberAddress;
       setDefault();
-  }
-
+      // return a.memberAddress === checksumAddress;
+    } catch (error) {
+      alert("Member's wallet is invalid...");
+      setDefault();
+    }
 
     // try {
     //   const isValidWallet = PublicKey.isOnCurve(new PublicKey(a.memberAddress));
     //   if (isValidWallet) {
-        
+
     //   }
     // } catch (error) {
-      
+
     // }
   };
 
@@ -151,88 +151,96 @@ if (!utils.isHexString(a.memberAddress)) {
     }
     return new File([u8arr], filename, { type: mime });
   }
- 
-  function getAccessToken() {
-    // console.log(process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN);
-    return process.env.WEB3STORAGE_TOKEN_APIKEY;
-  }
 
- function accesstoken() {
-	// 	const ipfs = await IPFS.create();
-	// 	const result = await ipfs.add(dataSrc);
-	// 	const cid = result.cid
-	// 	const gateway = 'https://ipfs.io/ipfs/'
+  console.log("heloo==============>",process.env.NEXT_PUBLIC_MINTNFT);
+  // function getAccessToken() {
+  //   // console.log(process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN);
+  //   return process.env.WEB3STORAGE_TOKEN_APIKEY;
+  // }
+
+
+
+  function accesstoken() {
+    // 	const ipfs = await IPFS.create();
+    // 	const result = await ipfs.add(dataSrc);
+    // 	const cid = result.cid
+    // 	const gateway = 'https://ipfs.io/ipfs/'
     // 	console.log("Link ",gateway+cid);
-	
-	// return gateway+cid
-	// let ipfs: IPFSHTTPClient | undefined
-	// try {
-	// 	ipfs = create({
-	// 		url: 'https://ipfs.infura.io:5001/api/v0',
-	// 	})
-	// } catch (error) {
-	// 	console.error('IPFS error ', error)
-	// 	ipfs = undefined
-	// }
 
-	// const result = await (ipfs as IPFSHTTPClient).add(dataSrc)
-	// const cid = result.cid
-	// const path = result.path
-	// const url = `https://ipfs.infura.io/ipfs/${path}`
-	// 	console.log("Link ", url)
-	// return url
+    // return gateway+cid
+    // let ipfs: IPFSHTTPClient | undefined
+    // try {
+    // 	ipfs = create({
+    // 		url: 'https://ipfs.infura.io:5001/api/v0',
+    // 	})
+    // } catch (error) {
+    // 	console.error('IPFS error ', error)
+    // 	ipfs = undefined
+    // }
 
-	const accessToken = getAccessToken() as string;
-    // console.log("accessToken", accessToken);
-    const store = new Web3Storage({ token: accessToken });
-    return store
+    // const result = await (ipfs as IPFSHTTPClient).add(dataSrc)
+    // const cid = result.cid
+    // const path = result.path
+    // const url = `https://ipfs.infura.io/ipfs/${path}`
+    // 	console.log("Link ", url)
+    // return url
 
-}	
-const contractAddress = '0xa1030a0050D80bE4167AE2AF6409812Af9f013Fe';
-// const {data:signer} = useSigner()
-// const contract = useContract({
-//   address: contractAddress,
-//   abi: ABI,
-//   signerOrProvider: signer || provider,
-//   });
-// const provider = new ethers.providers.Web3Provider(window.ethereum)
-const provider = ethers.getDefaultProvider()
-// const signer = provider.getSigner(0);
-// const signer:any = await fetchSigner();
-// const contract = new ethers.Contract( contractAddress , ABI ,signer)
+    // const accessToken = getAccessToken() as string;
+    // // console.log("accessToken", accessToken); 
+    // const store = new Web3Storage({ token: accessToken });
+    // return store;
+  }
+  const contractAddress = "0xa1030a0050D80bE4167AE2AF6409812Af9f013Fe";
+  // const {data:signer} = useSigner()
+  // const contract = useContract({
+  //   address: contractAddress,
+  //   abi: ABI,
+  //   signerOrProvider: signer || provider,
+  //   });
+  // const provider = new ethers.providers.Web3Provider(window.ethereum)
+  const provider = ethers.getDefaultProvider();
+  // const signer = provider.getSigner(0);
+  // const signer:any = await fetchSigner();
+  // const contract = new ethers.Contract( contractAddress , ABI ,signer)
   const sendData = async () => {
     setLoading(true);
     var file = await dataURLtoFile(PreviewUrl, "nft.png");
-    console.log("File",typeof file)
+    console.log("File", typeof file);
 
-    const added = await client.add(file)
-      const url = `https://collab-nft.infura-ipfs.io/ipfs/${added.path}`
-      // updateFileUrl(url)
-
-    console.log("Added -> ", added.path);
-    
+    const added = await StoreData(file);
+    // const url = `https://collab-nft.infura-ipfs.io/ipfs/${added.path}`;
+    const url =`https://ipfs.io/ipfs/${added}`
+    // updateFileUrl(url)
 
 
-     // @ts-ignore: Object is possibly 'null'
-  //  const client =  await uploadImage(file);
+    // console.log("Added -> ", added.path);
+
     // @ts-ignore: Object is possibly 'null'
-  //  const cid = await client.put(file);
-  //  console.log('Cid ',cid);
-  console.log("client -> ",client);
-  console.log("MemberAddress -> ",MemberAddress);
-  
-  
-  const signer:any = await fetchSigner();
-  const contract = new ethers.Contract( contractAddress , ABI ,signer)
-  console.log("Check =====>",contract);
-  console.log("signer => ",signer);
-  
-  const response = await contract.safeMint("0x2B5eBa3377E57d333498653bcae8979A05b7c5e1", url);
-console.log("Response ", response);
+    //  const client =  await uploadImage(file);
+    // @ts-ignore: Object is possibly 'null'
+    //  const cid = await client.put(file);
+    //  console.log('Cid ',cid);
+    console.log("client -> ", client);
+    console.log("MemberAddress -> ", MemberAddress);
+
+    const signer: any = await fetchSigner();
+    const contract = new ethers.Contract(contractAddress, ABI, signer);
+    console.log("Check =====>", contract);
+    console.log("signer => ", signer);
+
+    const response = await contract.safeMint(
+      // address,
+      "0xAA0b5f72321b1ab2e2d6795cBaE6732B7c0f691d",
+      url
+    );
+    console.log("Response-------> ", response);
     setLoading(false);
   };
+  console.log("-----address",address)
   return (
+
     <>
+   
       <section className="px-12 flex flex-col ">
         <h1 className="text-white py-5 text-2xl xl:text-3xl font-Outfit font-medium ">
           Proof of Contribution NFT
@@ -310,10 +318,7 @@ console.log("Response ", response);
         <div>
           {memberCount === 0 ? (
             <>
-              <button
-                onClick={() => setForm(true)}
-                className={styles.btn}
-              >
+              <button onClick={() => setForm(true)} className={styles.btn}>
                 Add Member
               </button>
             </>
@@ -360,7 +365,9 @@ console.log("Response ", response);
                     </h1>
                     <h1 className="text-lg flex space-x-1">
                       <span className="text-[#636363]">CPs:</span>
-                      <span className="text-white font-normal">{ContributionPower}</span>
+                      <span className="text-white font-normal">
+                        {ContributionPower}
+                      </span>
                     </h1>
                   </div>
                   <h1
@@ -376,28 +383,28 @@ console.log("Response ", response);
         </div>
         {memberCount != 0 && (
           <>
-           {loading && (
-                <svg
-                  className={styles.svgDesign}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-              )}
+            {loading && (
+              <svg
+                className={styles.svgDesign}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            )}
             <button
               onClick={async (e) => {
                 await sendData();
@@ -417,7 +424,7 @@ console.log("Response ", response);
               <div className="w-full flex justify-center items-center">
                 <div className="fixed inset-0  backdrop-blur-sm">
                   <div className="flex justify-center items-center min-h-screen">
-                  <div className={styles.InnerCardForm}>
+                    <div className={styles.InnerCardForm}>
                       <h1 className="text-2xl text-white font-medium font-Outfit py-5">
                         Add a members
                       </h1>
@@ -514,7 +521,6 @@ console.log("Response ", response);
                 </div>
               </div>
             </div>
-          
           </>
         )}
       </section>
