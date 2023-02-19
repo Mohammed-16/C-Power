@@ -71,6 +71,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 	// )
 	return (
 		<Provider store={store}>
+			
 		<WagmiConfig client={wagmiClient}>
 			<RainbowKitProvider modalSize="compact" chains={chains}>
 				<Component {...pageProps} />

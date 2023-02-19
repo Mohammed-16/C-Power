@@ -1,4 +1,5 @@
 import React from 'react'
+import ArcanaaAuth from '../../components/ArcanaaAuth'
 import { Form } from '../../components/Form'
 import { Navbar } from '../../components/Navbar'
 import { Preview } from '../../components/Preview'
@@ -15,6 +16,7 @@ const Reward = () => {
 					</div>
 					<div className=' col-span-4'>
 						<Form />
+						<ArcanaaAuth/>
 					</div>
 				</div>
 			</div>

@@ -3,7 +3,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { BsExclamationCircleFill } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import member, { addNewMember, removeMember } from "../features/member";
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { AdminSuccess } from "./AdminSuccess";
 import IPFS from "ipfs-core";
 import { fetchSigner } from "@wagmi/core";
@@ -34,11 +34,14 @@ import {
   toMetaplexFileFromBrowser,
 } from "@metaplex-foundation/js";
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
+import { AuthProvider } from "@arcana/auth";
+import { ProvideAuth } from "@arcana/auth-react";
 import styles from "../styles/Form.module.css";
 import { Web3Storage } from "web3.storage";
 import ABI from "./ABI";
 import { create } from "ipfs-http-client";
-import {StoreData} from "../components/Store";
+import { StoreData } from "../components/Store";
+
 export const Form = () => {
   const projectId = "2EV1ulwPt2WecnTSBjILUic8pg9";
   const projectSecret = "964e43a1d4b789850dc353736a74ffc3";
@@ -53,7 +56,7 @@ export const Form = () => {
       authorization: auth,
     },
   });
-  const { address, isConnected } = useAccount()
+  const { address, isConnected } = useAccount();
   const { publicKey, connected, connect } = useWallet();
   const [form, setForm] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
@@ -152,13 +155,11 @@ export const Form = () => {
     return new File([u8arr], filename, { type: mime });
   }
 
-  console.log("heloo==============>",process.env.NEXT_PUBLIC_MINTNFT);
+  console.log("heloo==============>", process.env.NEXT_PUBLIC_MINTNFT);
   // function getAccessToken() {
   //   // console.log(process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN);
   //   return process.env.WEB3STORAGE_TOKEN_APIKEY;
   // }
-
-
 
   function accesstoken() {
     // 	const ipfs = await IPFS.create();
@@ -166,7 +167,6 @@ export const Form = () => {
     // 	const cid = result.cid
     // 	const gateway = 'https://ipfs.io/ipfs/'
     // 	console.log("Link ",gateway+cid);
-
     // return gateway+cid
     // let ipfs: IPFSHTTPClient | undefined
     // try {
@@ -177,16 +177,14 @@ export const Form = () => {
     // 	console.error('IPFS error ', error)
     // 	ipfs = undefined
     // }
-
     // const result = await (ipfs as IPFSHTTPClient).add(dataSrc)
     // const cid = result.cid
     // const path = result.path
     // const url = `https://ipfs.infura.io/ipfs/${path}`
     // 	console.log("Link ", url)
     // return url
-
     // const accessToken = getAccessToken() as string;
-    // // console.log("accessToken", accessToken); 
+    // // console.log("accessToken", accessToken);
     // const store = new Web3Storage({ token: accessToken });
     // return store;
   }
@@ -209,9 +207,8 @@ export const Form = () => {
 
     const added = await StoreData(file);
     // const url = `https://collab-nft.infura-ipfs.io/ipfs/${added.path}`;
-    const url =`https://ipfs.io/ipfs/${added}`
+    const url = `https://ipfs.io/ipfs/${added}`;
     // updateFileUrl(url)
-
 
     // console.log("Added -> ", added.path);
 
@@ -236,11 +233,9 @@ export const Form = () => {
     console.log("Response-------> ", response);
     setLoading(false);
   };
-  console.log("-----address",address)
+  console.log("-----address", address);
   return (
-
     <>
-   
       <section className="px-12 flex flex-col ">
         <h1 className="text-white py-5 text-2xl xl:text-3xl font-Outfit font-medium ">
           Proof of Contribution NFT
