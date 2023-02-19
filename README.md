@@ -4,3 +4,4 @@ UNITE-3 is a project focused on creating a new Contribution Power gating mechani
 #Smart Contract
 1. Polygon Mumbai Testnet - MintNFT Contract -> f410fiwldtavs7oq3h4jn4fcb6agant6g3owalpzaf7a
 2. Filecoin Hyperspace - MintNFT Contract -> 0x8152F9c91f666163b2447007ea5713dF5b9679B6
+3. Mantle Network - MintNFT Contract -> 0x4a760b327017CA7F5cEFEB3C2eED0bB46A855569
