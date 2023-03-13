@@ -28,24 +28,27 @@ import {
 	RainbowKitProvider, darkTheme 
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { mainnet, polygon, optimism, arbitrum } from 'wagmi/chains';
+import { mainnet, polygon, optimism, arbitrum, filecoinHyperspace } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
+import { ConnectKitProvider,  getDefaultClient } from "connectkit";
+
 
 function MyApp({ Component, pageProps }: AppProps) {
 
 	const { chains, provider } = configureChains(
-		[mainnet, polygon, optimism, arbitrum],
+		[filecoinHyperspace],
 		[
 			alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
 			publicProvider()
 		]
 	);
 
-	const { connectors } = getDefaultWallets({
-		appName: 'My RainbowKit App',
-		chains
-	});
+	const { connectors } = 
+		getDefaultClient({
+			appName: "HatcheryDAO",
+			chains,
+		  });
 
 	const wagmiClient = createClient({
 		autoConnect: true,
@@ -53,28 +56,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 		provider
 	})
 
-	// const network = WalletAdapterNetwork.Devnet
-
-	// const endpoint = useMemo(() => clusterApiUrl(network), [network])
-	// const wallets = useMemo(
-	// 	() => [
-	// 		new LedgerWalletAdapter(),
-	// 		new PhantomWalletAdapter(),
-	// 		new GlowWalletAdapter(),
-	// 		new SlopeWalletAdapter(),
-	// 		new SolletExtensionWalletAdapter(),
-	// 		new SolletWalletAdapter(),
-	// 		new SolflareWalletAdapter({ network }),
-	// 		new TorusWalletAdapter(),
-	// 	],
-	// 	[network]
-	// )
 	return (
 		<Provider store={store}>
 		<WagmiConfig client={wagmiClient}>
-			<RainbowKitProvider modalSize="compact" chains={chains}>
+			<ConnectKitProvider>
 				<Component {...pageProps} />
-			</RainbowKitProvider>
+			</ConnectKitProvider>
 		</WagmiConfig>
 		</Provider>
 	)
